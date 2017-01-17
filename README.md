@@ -9,7 +9,7 @@
 ## 样式的适配问题：
 1. pxtorem
     #### 适合移动端开发
-    ##### px to em 是前端自动化配置非常好用的包，将less或者css文件里的 px属性全部转换为em
+    ##### pxtorem 是前端自动化配置非常好用的包，将less或者css文件里的 px属性全部转换为em
     ##### document.documentElement.style.fontSize = window.innerWidth/3.75 + 'px’;
     ##### 这里的3.75是用来适配iPhone6下的样式，只需要在iPhone6下写好页面，其他屏幕尺寸自动缩放
    
@@ -19,6 +19,7 @@
           root_value: 100,
           replace: true,
           // 对指定的属性进行px to em
+          // 特定地方的属性不希望px to em时候, px->Px 后不会 to em
           prop_white_list: ['font', 'font-size', 'line-height', 
           'letter-spacing', 'width', 'height', 'margin', 'padding'],
         })
@@ -33,6 +34,9 @@
           browsers: ['last 2 versions', 'iOS 7', 'Android 4.2']
         }),
     ```
+    ## 特别注意：inline 或者 inline-block 属性
+    ## (未申明line-height情况下，拥有上述属性的元素会自动继承父级元素的font-size,可能会出现元素高度显示的bug)
+    ## 解决办法设置改元素的line-height：0px
 3. normalize.css
    #### 移动端或者pc端都试用
    #### 用来统一不同内核浏览器初始化样式
