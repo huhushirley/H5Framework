@@ -37,23 +37,26 @@ gulp.task('css', function(){
     .pipe(minifyCSS())
     .pipe(rename({ extname: '.min.css' }))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./css/'));
+    .pipe(gulp.dest('./css/'))
+    .pipe(hash()) 
+    .pipe(gulp.dest('public/css'))
+    .pipe(hash.manifest('css/assets.json'))
+    .pipe(gulp.dest('public'));
 });
 
 gulp.task('js',function(){
   return gulp.src(paths.js)
     .pipe(hash()) 
     .pipe(gulp.dest('public/js'))
-    .pipe(hash.manifest('assets.json'))
+    .pipe(hash.manifest('js/assets.json'))
     .pipe(gulp.dest('public'));
 });
 
 gulp.task('revHtml', function () {
-    return gulp.src(['public/assets.json', 'pages/*.html'])
+    return gulp.src(['public/*/assets.json', 'pages/*.html'])
         .pipe(revCollector())
         .pipe(gulp.dest('pages'));
 });
-
 
 
 gulp.task('default', function() {
