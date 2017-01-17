@@ -54,7 +54,9 @@ gulp.task('js',function(){
 
 gulp.task('revHtml', function () {
     return gulp.src(['public/*/assets.json', 'pages/*.html'])
-        .pipe(revCollector())
+        .pipe(revCollector({
+          replaceReved: true
+        }))
         .pipe(gulp.dest('pages'));
 });
 
