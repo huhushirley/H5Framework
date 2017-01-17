@@ -24,6 +24,10 @@
           'letter-spacing', 'width', 'height', 'margin', 'padding'],
         })
     ```
+    >
+    #### 特别注意: inline 或者 inline-block 属性
+    #### 未申明line-height情况下，拥有上述属性的元素会自动继承父级元素的font-size,可能会出现元素高度显示的bug
+    #### 解决办法: 设置改元素的line-height：0px
 2. autoprefixer
     #### 移动端或者pc端都试用
     ##### 对弹性布局 flex 属性以及一些css3特性进行不同内核浏览器的适配，作兼容性处理
@@ -34,9 +38,6 @@
           browsers: ['last 2 versions', 'iOS 7', 'Android 4.2']
         }),
     ```
-    ## 特别注意：inline 或者 inline-block 属性
-    ## (未申明line-height情况下，拥有上述属性的元素会自动继承父级元素的font-size,可能会出现元素高度显示的bug)
-    ## 解决办法设置改元素的line-height：0px
 3. normalize.css
    #### 移动端或者pc端都试用
    #### 用来统一不同内核浏览器初始化样式
