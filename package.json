@@ -1,0 +1,22 @@
+{
+  "name": "kaide",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@git.oneband.life:shirley/kaide.git",
+  "author": "Sway <sway@SwaydeMacBook-Pro.local>",
+  "license": "MIT",
+  "scripts": {
+    "watch": "gulp",
+    "build": "gulp css"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.6.1",
+    "gulp": "^3.9.1",
+    "gulp-csso": "^2.0.0",
+    "gulp-less": "^3.3.0",
+    "gulp-postcss": "^6.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^2.3.1",
+    "postcss-pxtorem": "^3.3.1"
+  }
+}
