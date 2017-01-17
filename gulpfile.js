@@ -18,7 +18,7 @@ function handleError(err) {
   this.emit('end');
 }
 
-gulp.task('css', function(){
+gulp.task('css', function () {
   var processors = [
     autoprefixer({
       browsers: ['last 2 versions', 'iOS 7', 'Android 4.2']
@@ -38,29 +38,29 @@ gulp.task('css', function(){
     .pipe(rename({ extname: '.min.css' }))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./css/'))
-    .pipe(hash()) 
+    .pipe(hash())
     .pipe(gulp.dest('public/css'))
-    .pipe(hash.manifest('css/assets.json'))
+    .pipe(hash.manifest({ manifestPath: './css/assets.json'}))
     .pipe(gulp.dest('public'));
 });
 
-gulp.task('js',function(){
+gulp.task('js',function () {
   return gulp.src(paths.js)
-    .pipe(hash()) 
+    .pipe(hash())
     .pipe(gulp.dest('public/js'))
-    .pipe(hash.manifest('js/assets.json'))
+    .pipe(hash.manifest({ manifestPath: './js/assets.json'}))
     .pipe(gulp.dest('public'));
 });
 
 gulp.task('revHtml', function () {
-    return gulp.src(['public/*/assets.json', 'pages/*.html'])
-        .pipe(revCollector({
-          replaceReved: true
-        }))
-        .pipe(gulp.dest('pages'));
+  return gulp.src(['js/assets.json', 'css/assets.json', 'pages/*.html'])
+    .pipe(revCollector({
+      replaceReved: true
+    }))
+    .pipe(gulp.dest('pages'));
 });
 
-
+gulp.task('build', ['css', 'js', 'revHtml']);
 gulp.task('default', function() {
   gulp.watch(paths.less, ['css']);
 });

@@ -6,8 +6,9 @@
   "author": "Sway <sway@SwaydeMacBook-Pro.local>",
   "license": "MIT",
   "scripts": {
-    "watch": "gulp",
-    "build": "gulp css && gulp js && gulp revHtml"
+    "clean": "rimraf public",
+    "watch": "gulp watch",
+    "build": "npm run clean & gulp build"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.1",
@@ -20,6 +21,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-rev-collector": "^1.1.1",
     "gulp-sourcemaps": "^2.3.1",
-    "postcss-pxtorem": "^3.3.1"
+    "postcss-pxtorem": "^3.3.1",
+    "rimraf": "^2.5.4"
   }
 }
