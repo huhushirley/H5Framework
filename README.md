@@ -9,17 +9,17 @@
 ## 样式的适配问题：
 1. pxtorem
     #### 适合移动端开发
-    ##### pxtorem 是前端自动化配置非常好用的包，将less或者css文件里的 px属性全部转换为em
+    ##### pxtorem 是前端自动化配置非常好用的库，将less或者css文件里的 px属性全部转换为rem
     ##### document.documentElement.style.fontSize = window.innerWidth/3.75 + 'px’;
     ##### 这里的3.75是用来适配iPhone6下的样式，只需要在iPhone6下写好页面，其他屏幕尺寸实现自动缩放
    
     ``` javascript
         pxtorem({
-          // index.html 中需要定义body最开始的font-size大小，这里root_value是100，那么1em=100px;
+          // index.html 中需要定义body最开始的font-size大小，这里root_value是100，那么1rem=100px;
           root_value: 100,
           replace: true,
-          // 对指定的属性进行px to em
-          // 特定地方的属性不希望px to em时候, px->Px 后不会 to em
+          // 对指定的属性进行px to rem
+          // 特定地方的属性不希望px to rem时候, px->Px 后不会 to rem
           prop_white_list: ['font', 'font-size', 'line-height', 
           'letter-spacing', 'width', 'height', 'margin', 'padding'],
         })
@@ -27,7 +27,7 @@
     >
     #### 特别注意: inline 或者 inline-block 属性
     #### 未申明line-height情况下，拥有上述属性的元素会自动继承父级元素的font-size,可能会出现元素高度显示的bug
-    #### 解决办法: 设置改元素的line-height：0px
+    #### 解决办法: 设置改元素的line-height
 2. autoprefixer
     #### 移动端或者pc端都适用
     ##### 对弹性布局 flex 属性以及一些css3特性进行不同内核浏览器的适配，作兼容性处理
