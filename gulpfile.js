@@ -1,5 +1,7 @@
 var gulp = require('gulp');
 var less = require('gulp-less');
+var hash = require('gulp-hash');
+var revCollector = require('gulp-rev-collector');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer');
 var pxtorem = require('postcss-pxtorem');
@@ -8,7 +10,8 @@ var rename = require('gulp-rename');
 var sourcemaps = require('gulp-sourcemaps');
 
 var paths = {
-  less: ['./css/*.less']
+  less: ['./css/*.less'],
+  js: ['./js/*.js']
 };
 
 function handleError(err) {
@@ -36,6 +39,22 @@ gulp.task('css', function(){
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./css/'));
 });
+
+gulp.task('js',function(){
+  return gulp.src(paths.js)
+    .pipe(hash()) 
+    .pipe(gulp.dest('public/js'))
+    .pipe(hash.manifest('assets.json'))
+    .pipe(gulp.dest('public'));
+});
+
+gulp.task('revHtml', function () {
+    return gulp.src(['public/assets.json', 'pages/*.html'])
+        .pipe(revCollector())
+        .pipe(gulp.dest('pages'));
+});
+
+
 
 gulp.task('default', function() {
   gulp.watch(paths.less, ['css']);

@@ -7,15 +7,18 @@
   "license": "MIT",
   "scripts": {
     "watch": "gulp",
-    "build": "gulp css"
+    "build": "gulp css && gulp js && gulp revHtml"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.1",
     "gulp": "^3.9.1",
     "gulp-csso": "^2.0.0",
+    "gulp-hash": "^4.0.1",
     "gulp-less": "^3.3.0",
     "gulp-postcss": "^6.2.0",
+    "gulp-qiniu": "^0.2.4",
     "gulp-rename": "^1.2.2",
+    "gulp-rev-collector": "^1.1.1",
     "gulp-sourcemaps": "^2.3.1",
     "postcss-pxtorem": "^3.3.1"
   }
