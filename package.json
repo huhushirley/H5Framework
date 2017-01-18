@@ -6,7 +6,7 @@
   "author": "Sway <sway@SwaydeMacBook-Pro.local>",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf public",
+    "clean": "rimraf dist/assets & rimraf rev",
     "watch": "gulp watch",
     "build": "npm run clean & gulp build"
   },
@@ -20,8 +20,15 @@
     "gulp-qiniu": "^0.2.4",
     "gulp-rename": "^1.2.2",
     "gulp-rev-collector": "^1.1.1",
+    "gulp-rimraf": "^0.2.1",
     "gulp-sourcemaps": "^2.3.1",
+    "gulp-uglify": "^2.0.0",
     "postcss-pxtorem": "^3.3.1",
+    "pump": "^1.0.2",
     "rimraf": "^2.5.4"
+  },
+  "dependencies": {
+    "gulp-rev": "^7.1.2",
+    "gulp-rev-collector": "^1.1.1"
   }
 }

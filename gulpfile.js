@@ -1,6 +1,6 @@
 var gulp = require('gulp');
 var less = require('gulp-less');
-var hash = require('gulp-hash');
+var rev = require('gulp-rev');
 var revCollector = require('gulp-rev-collector');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer');
@@ -8,6 +8,8 @@ var pxtorem = require('postcss-pxtorem');
 var minifyCSS = require('gulp-csso');
 var rename = require('gulp-rename');
 var sourcemaps = require('gulp-sourcemaps');
+var uglify = require('gulp-uglify');
+var pump = require('pump');
 
 var paths = {
   less: ['./css/*.less'],
@@ -38,29 +40,40 @@ gulp.task('css', function () {
     .pipe(rename({ extname: '.min.css' }))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./css/'))
-    .pipe(hash())
-    .pipe(gulp.dest('public/css'))
-    .pipe(hash.manifest({ manifestPath: './css/assets.json'}))
-    .pipe(gulp.dest('public'));
+    .pipe(rev())
+    .pipe(gulp.dest('./dist/assets/css'))
+    .pipe( rev.manifest('css/asset.json') )
+    .pipe( gulp.dest( 'rev' ) );
+});
+
+gulp.task('compress', function (cb) {
+  pump([
+      gulp.src(paths.js),
+      uglify(),
+      rename({ extname: '.min.js' }),
+      gulp.dest('js')
+    ],
+    cb
+  );
 });
 
 gulp.task('js',function () {
-  return gulp.src(paths.js)
-    .pipe(hash())
-    .pipe(gulp.dest('public/js'))
-    .pipe(hash.manifest({ manifestPath: './js/assets.json'}))
-    .pipe(gulp.dest('public'));
+  return gulp.src('js/*.min.js')
+    .pipe(rev())
+    .pipe(gulp.dest('./dist/assets/js'))
+    .pipe( rev.manifest('js/asset.json') )
+    .pipe( gulp.dest('./rev/') );
 });
 
 gulp.task('revHtml', function () {
-  return gulp.src(['js/assets.json', 'css/assets.json', 'pages/*.html'])
+  return gulp.src(['rev/*/*.json', 'pages/*.html'])
     .pipe(revCollector({
-      replaceReved: true
+      replaceReved: true,
     }))
-    .pipe(gulp.dest('pages'));
+    .pipe( gulp.dest('./dist') );
 });
 
-gulp.task('build', ['css', 'js', 'revHtml']);
+gulp.task('build', ['css', 'js']);
 gulp.task('default', function() {
   gulp.watch(paths.less, ['css']);
 });
