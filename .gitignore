@@ -1,4 +1,4 @@
 .DS_Store
 node_modules/
 css/main.min.css
-public/
+dist/
