@@ -21,7 +21,7 @@ function handleError(err) {
   this.emit('end');
 }
 
-gulp.task('css', function () {
+gulp.task('css', function(){
   var processors = [
     autoprefixer({
       browsers: ['last 2 versions', 'iOS 7', 'Android 4.2']
@@ -33,18 +33,12 @@ gulp.task('css', function () {
       'width', 'height', 'margin', 'padding'],
     })
   ];
-  return gulp.src('css/main.less')
+  return gulp.src('./css/main.less')
     .pipe(sourcemaps.init())
     .pipe(less().on('error', handleError))
     .pipe(postcss(processors))
-    .pipe(minifyCSS())
-    .pipe(rename({ extname: '.min.css' }))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./css/'))
-    .pipe(rev())
-    .pipe(gulp.dest('./dist/assets/css'))
-    .pipe(rev.manifest('css/asset.json'))
-    .pipe(gulp.dest('rev'));
+    .pipe(rename({ extname: '.css' }))
+    .pipe(gulp.dest('./css/'));
 });
 
 gulp.task('compress', function (cb) {
