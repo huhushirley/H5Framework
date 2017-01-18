@@ -42,8 +42,8 @@ gulp.task('css', function () {
     .pipe(gulp.dest('./css/'))
     .pipe(rev())
     .pipe(gulp.dest('./dist/assets/css'))
-    .pipe( rev.manifest('css/asset.json') )
-    .pipe( gulp.dest( 'rev' ) );
+    .pipe(rev.manifest('css/asset.json'))
+    .pipe(gulp.dest('rev'));
 });
 
 gulp.task('compress', function (cb) {
@@ -61,8 +61,8 @@ gulp.task('js',function () {
   return gulp.src('js/*.min.js')
     .pipe(rev())
     .pipe(gulp.dest('./dist/assets/js'))
-    .pipe( rev.manifest('js/asset.json') )
-    .pipe( gulp.dest('./rev/') );
+    .pipe(rev.manifest('js/asset.json') )
+    .pipe(gulp.dest('./rev/'));
 });
 
 gulp.task('revHtml', function () {
@@ -70,7 +70,7 @@ gulp.task('revHtml', function () {
     .pipe(revCollector({
       replaceReved: true,
     }))
-    .pipe( gulp.dest('./dist') );
+    .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('build', ['css', 'js']);
