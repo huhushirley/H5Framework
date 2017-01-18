@@ -10,6 +10,7 @@ var rename = require('gulp-rename');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var pump = require('pump');
+var gulpsync = require('gulp-sync')(gulp);
 
 var paths = {
   less: ['./css/*.less'],
@@ -57,6 +58,17 @@ gulp.task('compress', function (cb) {
   );
 });
 
+gulp.task('minify', function() {
+  return gulp.src('./css/main.css')
+    .pipe(minifyCSS())
+    .pipe(rename({ extname: '.min.css' }))
+    .pipe(gulp.dest('./css/'))
+    .pipe(rev())
+    .pipe(gulp.dest('./dist/assets/css'))
+    .pipe(rev.manifest('css/asset.json'))
+    .pipe(gulp.dest('rev'));
+});
+
 gulp.task('js',function () {
   return gulp.src('js/*.min.js')
     .pipe(rev())
@@ -65,15 +77,19 @@ gulp.task('js',function () {
     .pipe(gulp.dest('./rev/'));
 });
 
-gulp.task('revHtml', function () {
+gulp.task('revHtml', function() {
   return gulp.src(['rev/*/*.json', 'pages/*.html'])
     .pipe(revCollector({
       replaceReved: true,
+      dirReplacements: {
+        '../css': './dist/assets',
+        '../js': './dist/assets'
+      }
     }))
     .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('build', ['css', 'js']);
+gulp.task('build', gulpsync.sync([['compress', 'minify'],'js', 'revHtml']));
 gulp.task('default', function() {
   gulp.watch(paths.less, ['css']);
 });
