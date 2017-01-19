@@ -6,7 +6,7 @@
   "author": "Sway <sway@SwaydeMacBook-Pro.local>",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf dist/assets",
+    "clean": "rimraf dist/assets & rimraf rev",
     "watch": "gulp css && gulp",
     "build": "npm run clean & gulp build"
   },

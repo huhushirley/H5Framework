@@ -21,7 +21,7 @@ function handleError(err) {
   this.emit('end');
 }
 
-gulp.task('css', function(){
+gulp.task('watch', function(){
   var processors = [
     autoprefixer({
       browsers: ['last 2 versions', 'iOS 7', 'Android 4.2']
@@ -41,34 +41,25 @@ gulp.task('css', function(){
     .pipe(gulp.dest('./css/'));
 });
 
-gulp.task('compress', function (cb) {
-  pump([
-      gulp.src(paths.js),
-      uglify(),
-      rename({ extname: '.min.js' }),
-      gulp.dest('js')
-    ],
-    cb
-  );
-});
 
 gulp.task('minify', function() {
   return gulp.src('./css/main.css')
+    .pipe(rev())
     .pipe(minifyCSS())
     .pipe(rename({ extname: '.min.css' }))
-    .pipe(gulp.dest('./css/'))
-    .pipe(rev())
     .pipe(gulp.dest('./dist/assets/css'))
-    .pipe(rev.manifest('css/asset.json'))
-    .pipe(gulp.dest('rev'));
+    .pipe(rev.manifest('asset.json'))
+    .pipe(gulp.dest('./rev/css'));
 });
 
 gulp.task('js',function () {
-  return gulp.src('js/*.min.js')
+  return gulp.src(paths.js)
     .pipe(rev())
+    .pipe(uglify())
+    .pipe(rename({ extname: '.min.js' }))
     .pipe(gulp.dest('./dist/assets/js'))
-    .pipe(rev.manifest('js/asset.json') )
-    .pipe(gulp.dest('./rev/'));
+    .pipe(rev.manifest('asset.json') )
+    .pipe(gulp.dest('./rev/js'));
 });
 
 gulp.task('revHtml', function() {
@@ -76,14 +67,14 @@ gulp.task('revHtml', function() {
     .pipe(revCollector({
       replaceReved: true,
       dirReplacements: {
-        '../css': './dist/assets',
-        '../js': './dist/assets'
+        '../css/': './dist/css',
+        '../js/': './dist/js'
       }
     }))
     .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('build', gulpsync.sync([['compress', 'minify'],'js', 'revHtml']));
-gulp.task('default', function() {
-  gulp.watch(paths.less, ['css']);
+gulp.task('build', gulpsync.sync([['minify','js'], 'revHtml']));
+gulp.task('default', function() { 
+  gulp.watch(paths.less, ['watch']);
 });
