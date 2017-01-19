@@ -62,14 +62,13 @@
 # 安装依赖文件
 
 ```
-yarn install
-npm install
+yarn
 ```
 
 # 实时编译静态资源
 
 ```
-npm run watch
+npm run start
 ```
 # 编译静态资源到线上环境
 
