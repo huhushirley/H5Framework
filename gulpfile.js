@@ -45,30 +45,30 @@ gulp.task('watch', function(){
 gulp.task('minify', function() {
   return gulp.src('./css/main.css')
     .pipe(rev())
+    .pipe(gulp.dest('./dist/assets/css'))
     .pipe(minifyCSS())
     .pipe(rename({ extname: '.min.css' }))
-    .pipe(gulp.dest('./dist/assets/css'))
-    .pipe(rev.manifest('asset.json'))
-    .pipe(gulp.dest('./rev/css'));
+    .pipe(rev.manifest('css/asset.json'))
+    .pipe(gulp.dest('./rev'));
 });
 
 gulp.task('js',function () {
   return gulp.src(paths.js)
     .pipe(rev())
+    .pipe(gulp.dest('./dist/assets/js'))
     .pipe(uglify())
     .pipe(rename({ extname: '.min.js' }))
-    .pipe(gulp.dest('./dist/assets/js'))
-    .pipe(rev.manifest('asset.json') )
-    .pipe(gulp.dest('./rev/js'));
+    .pipe(rev.manifest('js/asset.json') )
+    .pipe(gulp.dest('./rev'));
 });
 
 gulp.task('revHtml', function() {
-  return gulp.src(['rev/*/*.json', 'pages/*.html'])
+  return gulp.src(['rev/css/*.json', 'rev/js/*.json', 'pages/*.html'])
     .pipe(revCollector({
       replaceReved: true,
       dirReplacements: {
-        '../css/': './dist/css',
-        '../js/': './dist/js'
+        '../css': './dist/assets/css',
+        '../js': './dist/assets/js'
       }
     }))
     .pipe(gulp.dest('./dist'));
