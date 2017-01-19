@@ -1,6 +1,11 @@
 .DS_Store
+
 node_modules/
+
 dist/
-js/*.min.js
-css/*.min.css
-rev/
+src/pages/assets/
+
+*.log
+
+
+
