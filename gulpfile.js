@@ -1,80 +1,78 @@
 var gulp = require('gulp');
 var less = require('gulp-less');
 var rev = require('gulp-rev');
-var revCollector = require('gulp-rev-collector');
+var revReplace = require('gulp-rev-replace');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer');
 var pxtorem = require('postcss-pxtorem');
-var minifyCSS = require('gulp-csso');
+var csso = require('gulp-csso');
 var rename = require('gulp-rename');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
-var pump = require('pump');
+var concat = require('gulp-concat');
 var gulpsync = require('gulp-sync')(gulp);
 
 var paths = {
-  less: ['./css/*.less'],
-  js: ['./js/*.js']
+  less: ['src/css/*.less'],
+  js: ['src/js/*.js']
 };
+
+var processors = [
+  autoprefixer({
+    browsers: ['last 2 versions', 'iOS 7', 'Android 4.2']
+  }),
+  pxtorem({
+    root_value: 100,
+    replace: true,
+    prop_white_list: ['font', 'font-size', 'line-height', 'letter-spacing',
+    'width', 'height', 'margin', 'padding'],
+  })
+];
+
 
 function handleError(err) {
   this.emit('end');
 }
 
-gulp.task('watch', function(){
-  var processors = [
-    autoprefixer({
-      browsers: ['last 2 versions', 'iOS 7', 'Android 4.2']
-    }),
-    pxtorem({
-      root_value: 100,
-      replace: true,
-      prop_white_list: ['font', 'font-size', 'line-height', 'letter-spacing',
-      'width', 'height', 'margin', 'padding'],
-    })
-  ];
-  return gulp.src('./css/main.less')
+gulp.task('css', function (){
+  return gulp.src('src/css/main.less')
     .pipe(sourcemaps.init())
     .pipe(less().on('error', handleError))
     .pipe(postcss(processors))
+    .pipe(csso())
     .pipe(rename({ extname: '.css' }))
-    .pipe(gulp.dest('./css/'));
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('src/pages/assets'));
 });
 
-
-gulp.task('minify', function() {
-  return gulp.src('./css/main.css')
-    .pipe(rev())
-    .pipe(minifyCSS())
-    .pipe(rename({ extname: '.min.css' }))
-    .pipe(gulp.dest('./dist/assets/css'))
-    .pipe(rev.manifest('asset.json'))
-    .pipe(gulp.dest('./rev/css'));
-});
-
-gulp.task('js',function () {
-  return gulp.src(paths.js)
-    .pipe(rev())
+gulp.task('js', function (){
+  return gulp.src('src/js/*.js')
+    .pipe(sourcemaps.init())
+    .pipe(concat('main.js'))
     .pipe(uglify())
-    .pipe(rename({ extname: '.min.js' }))
-    .pipe(gulp.dest('./dist/assets/js'))
-    .pipe(rev.manifest('asset.json') )
-    .pipe(gulp.dest('./rev/js'));
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('src/pages/assets'));
 });
 
-gulp.task('revHtml', function() {
-  return gulp.src(['rev/*/*.json', 'pages/*.html'])
-    .pipe(revCollector({
-      replaceReved: true,
-      dirReplacements: {
-        '../css/': './dist/css',
-        '../js/': './dist/js'
-      }
-    }))
-    .pipe(gulp.dest('./dist'));
+
+gulp.task('revision', function () {
+  return gulp.src(["src/pages/assets/main.js", "src/pages/assets/main.css"])
+    .pipe(rev())
+    .pipe(gulp.dest('dist/assets'))
+    .pipe(rev.manifest())
+    .pipe(gulp.dest('dist/assets'))
 });
 
-gulp.task('build', gulpsync.sync([['minify','js'], 'revHtml']));
-gulp.task('default', function() { 
-  gulp.watch(paths.less, ['watch']);
+gulp.task("replace", ["revision"], function () {
+  var manifest = gulp.src('dist/assets/rev-manifest.json');
+  return gulp.src('src/pages/*.html')
+    .pipe(revReplace({ manifest: manifest }))
+    .pipe(gulp.dest('dist'));
 });
+
+gulp.task('build', gulpsync.sync([['css','js'], ['replace']]));
+gulp.task('watch', function () {
+  gulp.watch(paths.less, ['css']);
+  gulp.watch(paths.js, ['js']);
+})
+gulp.task('default', ['css', 'js', 'watch']);
