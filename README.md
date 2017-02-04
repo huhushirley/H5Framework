@@ -1,16 +1,66 @@
-## 项目结构
+# 安装依赖文件
+`yarn or npm install`
 
 
-## 依赖库说明：
+# 实时编译静态资源
+`npm run start`
+
+
+# 编译静态资源到线上环境
+`npm run build`
+
+
+# 项目目录结构:
+```
+-------------------project
+    |
+    |--------------dist (该文件夹打包生成的)
+    |   |
+    |   |----------assets
+    |   |   |
+    |   |   |------main-9dcc24fe2e.css
+    |   |   |
+    |   |   |------main-9dcc24fe2e.js
+    |   |   |
+    |   |   |------rev-manifest.json
+    |   |
+    |   |----------home.html
+    |
+    |--------------src  (开发环境下)
+    |   |
+    |   |----------css
+    |   |   |
+    |   |   |------home.less
+    |   |   |
+    |   |   |------main.less
+    |   |----------js
+    |   |   |
+    |   |   |------global.js
+    |   |   |
+    |   |   |------home.js
+    |   |
+    |   |----------pages
+    |   |   |
+    |   |   |----------assets
+    |   |   |   |
+    |   |   |   |------main.css
+    |   |   |   |
+    |   |   |   |------main.js
+    |   |   |
+    |   |   |------home.html
+    |   |
+```
+
+# 依赖库说明：
 
 >
 + gulp-rev 解决网页静态资源缓存问题 (把静态文件名改成hash的形式)
-+ gulp-rev-collector 到线上环境线，用来配合gulp-rev使用，替换 HTML 中的路径
++ gulp-rev-replace 配合 gulp-rev 使用，拿到生成的 manifest.json 后替换对应的文件名称
 + gulp-sync 解决gulp任务异步问题
 + fetch.js 用于H5中 api对接
 + sizzle.min.js 用于操控DOM元素 （ 轻量级 ）
 
-## 样式的适配问题：
+# 样式的适配问题：
 1. pxtorem
     #### 适合移动端开发
     ##### pxtorem 是前端自动化配置非常好用的库，将less或者css文件里的 px属性全部转换为rem
@@ -59,19 +109,5 @@
 ```
 
 ---
-# 安装依赖文件
 
-```
-yarn
-```
 
-# 实时编译静态资源
-
-```
-npm run start
-```
-# 编译静态资源到线上环境
-
-```
-npm run build
-```
